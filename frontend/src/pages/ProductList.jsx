@@ -99,7 +99,10 @@ const ProductList = () => {
   
   // 处理视图模式切换
   const handleViewModeChange = (mode) => {
-    setViewMode(mode)
+    // 管理员只能使用'all'模式
+    if (userInfo?.user_type !== 'admin') {
+      setViewMode(mode)
+    }
     setCurrentPage(1)
   }
 
@@ -124,7 +127,7 @@ const ProductList = () => {
   // 获取标题文本
   const getPageTitle = () => {
     if (userInfo?.user_type === 'admin') {
-      return viewMode === 'my' ? '我的商品' : '商品管理'
+      return '商品管理'
     }
     return viewMode === 'my' ? '我的商品' : '商品列表'
   }
@@ -168,8 +171,8 @@ const ProductList = () => {
           <h1>{getPageTitle()}</h1>
           
           <div className="header-actions">
-            {/* 登录用户可以切换到我的商品视图 */}
-            {userInfo && (
+            {/* 非管理员登录用户可以切换到我的商品视图 */}
+            {userInfo && userInfo.user_type !== 'admin' && (
               <Button
                 type={viewMode === 'my' ? 'primary' : 'default'}
                 onClick={() => handleViewModeChange(viewMode === 'my' ? 'all' : 'my')}

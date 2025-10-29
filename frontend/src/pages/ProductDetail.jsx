@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Row, Col, Button, Tabs, Tag, Descriptions, Avatar, Spin, message, Modal, Popconfirm } from 'antd'
 import { UserOutlined, PhoneOutlined, MailOutlined, HeartOutlined, ShareAltOutlined, MessageOutlined, EnvironmentOutlined, CalendarOutlined, EyeOutlined, StarOutlined, EditOutlined, DeleteOutlined, LockOutlined, UnlockOutlined, FlagOutlined, MoreOutlined } from '@ant-design/icons'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { getProductDetail, createTransaction, formatPrice, getProductConditionText, addFavorite, removeFavorite, checkFavorite } from '../utils/api.js'
 import styled from 'styled-components'
 import { useUser } from '../hooks/useUser.js'
@@ -10,7 +10,8 @@ const { TabPane } = Tabs
 
 const ProductDetail = () => {
   const { id } = useParams()
-  const { userInfo } = useUser()
+  const navigate = useNavigate()
+  const { userInfo, isLoggedIn } = useUser()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
@@ -197,8 +198,37 @@ const ProductDetail = () => {
     checkProductFavorite()
   }, [userInfo, id])
 
-  if (loading) {
+  // 如果用户未登录，显示登录提示
+  if (!isLoggedIn) {
     return (
+      <ProductDetailContainer>
+        <Card className="login-required-card">
+          <div style={{ 
+            textAlign: 'center', 
+            padding: '60px 20px', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '400px'
+          }}>
+            <LockOutlined style={{ fontSize: '48px', color: '#1890ff', marginBottom: '24px' }} />
+            <h2 style={{ marginBottom: '16px', color: '#333' }}>查看商品详情需要先登录</h2>
+            <p style={{ marginBottom: '32px', color: '#666' }}>登录后即可查看完整的商品信息和进行购买操作</p>
+            <Button 
+              type="primary" 
+              size="large" 
+              onClick={() => navigate('/login')}
+            >
+              立即登录
+            </Button>
+          </div>
+        </Card>
+      </ProductDetailContainer>
+    )
+  }
+
+  if (loading) {    return (
       <ProductDetailContainer>
         <Spin size="large" tip="加载中..." />
       </ProductDetailContainer>
@@ -456,6 +486,12 @@ const ProductDetailContainer = styled.div`
   padding: 24px;
   background-color: #f5f5f5;
   min-height: calc(100vh - 64px);
+  
+  .login-required-card {
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 
   .product-images-card {
     margin-bottom: 24px;

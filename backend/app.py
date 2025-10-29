@@ -422,6 +422,10 @@ def get_products():
 
 @app.route('/api/products/<product_id>', methods=['GET'])
 def get_product_detail(product_id):
+    user = get_current_user()
+    if not user:
+        return jsonify({'message': '未登录'}), 401
+    
     product = Product.query.get(product_id)
     if not product:
         return jsonify({'message': '商品不存在'}), 404
