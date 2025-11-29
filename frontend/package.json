@@ -1,0 +1,27 @@
+{
+  "name": "campus-trade-frontend",
+  "version": "1.0.0",
+  "description": "校园二手商品交易系统前端",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.0",
+    "axios": "^1.2.3",
+    "antd": "^5.1.7",
+    "@ant-design/icons": "^5.0.1",
+    "styled-components": "^5.3.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^3.0.1",
+    "vite": "^4.0.4"
+  },
+  "keywords": ["campus", "trade", "second-hand", "react"],
+  "author": "",
+  "license": "ISC"
+}
